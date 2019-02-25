@@ -5,11 +5,12 @@
 
     <div class='panel-body'>
         <!-- Filter by the Title   -->
-        <pm-criteria class="col-md-10"
-        [displayDetail]='includeDetail'
-        [hitCount]='filteredProducts?.length'>
-
+        <pm-criteria #filterCriteria
+                      class="col-md-10"
+                      [displayDetail]='includeDetail'
+                      [hitCount]='filteredProducts?.length'>
         </pm-criteria>
+        {{ filterCriteria.listFilter }}
 
         <div class='table-responsive'>
             <table class='table'
