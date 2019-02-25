@@ -1,8 +1,8 @@
 import { Component, OnInit, ViewChild, AfterViewInit, ElementRef, ViewChildren, QueryList } from '@angular/core';
+import { NgModel } from '@angular/forms';
 
 import { IProduct } from './product';
 import { ProductService } from './product.service';
-import { NgModel } from '@angular/forms';
 
 @Component({
     templateUrl: './product-list.component.html',
@@ -18,18 +18,9 @@ export class ProductListComponent implements OnInit, AfterViewInit {
     errorMessage: string;
 
     @ViewChild('filterElement') filterElementRef: ElementRef;
-    @ViewChildren(NgModel) inputElementRefs: QueryList<NgModel>;
+    @ViewChild(NgModel) filterInput: NgModel;
 
-    private _listFilter: string;
-
-    get listFilter(): string {
-      return this._listFilter;
-    }
-
-    set listFilter(value: string) {
-      this._listFilter = value;
-      this.performFilter(value);
-    }
+    listFilter: string;
 
     filteredProducts: IProduct[];
     products: IProduct[];
@@ -40,20 +31,22 @@ export class ProductListComponent implements OnInit, AfterViewInit {
 
     ngAfterViewInit(): void {
       this.filterElementRef.nativeElement.focus();
-      console.log(this.inputElementRefs);
+      console.log('NgModel', this.filterInput);
 
     }
 
     ngOnInit(): void {
-      console.log('NgInit called');
+      this.filterInput.valueChanges.subscribe(
+        value => this.performFilter(value)
+      );
 
-        this.productService.getProducts().subscribe(
-            (products: IProduct[]) => {
-                this.products = products;
-                this.performFilter(this.listFilter);
-            },
-            (error: any) => this.errorMessage = <any>error
-        );
+      this.productService.getProducts().subscribe(
+          (products: IProduct[]) => {
+              this.products = products;
+              this.performFilter(this.listFilter);
+          },
+          (error: any) => this.errorMessage = <any>error
+      );
     }
 
     toggleImage(): void {
