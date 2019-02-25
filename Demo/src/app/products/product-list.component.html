@@ -8,9 +8,9 @@
         <pm-criteria #filterCriteria
                       class="col-md-10"
                       [displayDetail]='includeDetail'
-                      [hitCount]='filteredProducts?.length'>
+                      [hitCount]='filteredProducts?.length'
+                      (valueChange)='onValueChange($event)'>
         </pm-criteria>
-        {{ filterCriteria.listFilter }}
 
         <div class='table-responsive'>
             <table class='table'
@@ -43,7 +43,7 @@
                         <td><a [routerLink]="['/products', product.id]">
                                 {{ product.productName }}
                             </a>
-						</td>
+						            </td>
                         <td>{{ product.productCode }}</td>
                         <td>{{ product.releaseDate }}</td>
                         <td>{{ product.price | currency:'USD':'symbol':'1.2-2'}}</td>
