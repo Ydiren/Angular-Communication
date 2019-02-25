@@ -1,5 +1,4 @@
-import { Component, OnInit, ViewChild, AfterViewInit, ElementRef, ViewChildren, QueryList } from '@angular/core';
-import { NgModel } from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
 
 import { IProduct } from './product';
 import { ProductService } from './product.service';
@@ -8,37 +7,15 @@ import { ProductService } from './product.service';
     templateUrl: './product-list.component.html',
     styleUrls: ['./product-list.component.css']
 })
-export class ProductListComponent implements OnInit, AfterViewInit {
+export class ProductListComponent implements OnInit {
 
     pageTitle: string = 'Product List';
     showImage: boolean;
+    includeDetail: boolean = true;
 
     imageWidth: number = 50;
     imageMargin: number = 2;
     errorMessage: string;
-
-    @ViewChild('filterElement') filterElementRef: ElementRef;
-
-    private _filterInput: NgModel;
-
-    get filterInput(): NgModel {
-      return this._filterInput;
-    }
-
-    @ViewChild(NgModel)
-    set filterInput(value: NgModel) {
-      this._filterInput = value;
-      if (this.filterInput) {
-        this.filterInput.valueChanges.subscribe(
-          () => this.performFilter(this.listFilter)
-        );
-      }
-      if (this.filterElementRef) {
-        this.filterElementRef.nativeElement.focus();
-      }
-    }
-
-    listFilter: string;
 
     filteredProducts: IProduct[];
     products: IProduct[];
@@ -47,19 +24,12 @@ export class ProductListComponent implements OnInit, AfterViewInit {
 
     }
 
-    ngAfterViewInit(): void {
-      // this.filterInput.valueChanges.subscribe(
-      //   value => this.performFilter(value)
-      // );
-      // this.filterElementRef.nativeElement.focus();
-    }
-
     ngOnInit(): void {
 
       this.productService.getProducts().subscribe(
           (products: IProduct[]) => {
               this.products = products;
-              this.performFilter(this.listFilter);
+              this.performFilter();
           },
           (error: any) => this.errorMessage = <any>error
       );
