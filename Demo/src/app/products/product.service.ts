@@ -8,14 +8,14 @@ import { of } from 'rxjs/observable/of';
 import { catchError, tap } from 'rxjs/operators';
 
 import { IProduct } from './product';
-import { Subject } from 'rxjs/Subject';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 @Injectable()
 export class ProductService {
     private productsUrl = 'api/products';
     private products: IProduct[];
 
-    private selectedProductSource = new Subject<IProduct | null>();
+    private selectedProductSource = new BehaviorSubject<IProduct | null>(null);
     selectedProductChanges$ = this.selectedProductSource.asObservable();
 
     constructor(private http: HttpClient) { }
